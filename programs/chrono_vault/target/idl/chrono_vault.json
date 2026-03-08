@@ -1,0 +1,303 @@
+{
+  "address": "u8Jw4y4seuWQYPMpZHwFGiPLUzXi1vFrKm6MB5Kiy8f",
+  "metadata": {
+    "name": "chrono_vault",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "ChronoVault - Time-locked capsule program on Solana"
+  },
+  "instructions": [
+    {
+      "name": "create_capsule",
+      "discriminator": [
+        195,
+        104,
+        42,
+        180,
+        127,
+        169,
+        62,
+        3
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "capsule",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  97,
+                  112,
+                  115,
+                  117,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "capsule_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "capsule_id",
+          "type": "string"
+        },
+        {
+          "name": "unlock_timestamp",
+          "type": "i64"
+        },
+        {
+          "name": "encrypted_cid",
+          "type": "string"
+        },
+        {
+          "name": "escrow_amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "unlock_capsule",
+      "discriminator": [
+        252,
+        32,
+        190,
+        14,
+        240,
+        239,
+        46,
+        228
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "capsule"
+          ]
+        },
+        {
+          "name": "capsule",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  97,
+                  112,
+                  115,
+                  117,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "capsule_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "_capsule_id",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Capsule",
+      "discriminator": [
+        212,
+        231,
+        77,
+        219,
+        58,
+        13,
+        118,
+        241
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "CapsuleCreated",
+      "discriminator": [
+        113,
+        132,
+        247,
+        198,
+        217,
+        47,
+        201,
+        223
+      ]
+    },
+    {
+      "name": "CapsuleUnlocked",
+      "discriminator": [
+        225,
+        147,
+        157,
+        140,
+        191,
+        11,
+        31,
+        94
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "UnlockTimestampMustBeFuture",
+      "msg": "Unlock timestamp must be in the future"
+    },
+    {
+      "code": 6001,
+      "name": "CapsuleAlreadyUnlocked",
+      "msg": "Capsule has already been unlocked"
+    },
+    {
+      "code": 6002,
+      "name": "UnlockTimestampNotReached",
+      "msg": "Unlock timestamp has not been reached yet"
+    },
+    {
+      "code": 6003,
+      "name": "UnauthorizedUnlock",
+      "msg": "Only the capsule creator can unlock it"
+    },
+    {
+      "code": 6004,
+      "name": "CapsuleIdTooLong",
+      "msg": "Capsule ID exceeds maximum length of 64 characters"
+    },
+    {
+      "code": 6005,
+      "name": "CidTooLong",
+      "msg": "Encrypted CID exceeds maximum length of 256 characters"
+    }
+  ],
+  "types": [
+    {
+      "name": "Capsule",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "capsule_id",
+            "type": "string"
+          },
+          {
+            "name": "unlock_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "encrypted_cid",
+            "type": "string"
+          },
+          {
+            "name": "escrow_amount",
+            "type": "u64"
+          },
+          {
+            "name": "status",
+            "type": "u8"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CapsuleCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "capsule_id",
+            "type": "string"
+          },
+          {
+            "name": "unlock_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "escrow_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CapsuleUnlocked",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "capsule_id",
+            "type": "string"
+          },
+          {
+            "name": "unlocked_at",
+            "type": "i64"
+          }
+        ]
+      }
+    }
+  ]
+}
