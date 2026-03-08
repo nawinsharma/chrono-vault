@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeScreenView } from '@/src/components/ui/ScreenContainer';
 import * as Clipboard from 'expo-clipboard';
 
 import { useCapsuleStore } from '@/src/stores/capsuleStore';
@@ -48,12 +48,12 @@ export default function CapsuleDetailScreen() {
 
   if (!capsule) {
     return (
-      <SafeAreaView className="flex-1 bg-vault-black items-center justify-center">
+      <SafeScreenView className="flex-1 bg-vault-black items-center justify-center">
         <Text className="text-vault-muted">Capsule not found</Text>
         <TouchableOpacity onPress={() => router.back()} className="mt-4">
           <Text className="text-vault-purple">Go Back</Text>
         </TouchableOpacity>
-      </SafeAreaView>
+      </SafeScreenView>
     );
   }
 
@@ -61,7 +61,7 @@ export default function CapsuleDetailScreen() {
   const canUnlock = isLocked && countdown.isExpired;
 
   return (
-    <SafeAreaView className="flex-1 bg-vault-black">
+    <SafeScreenView className="flex-1 bg-vault-black">
       {/* Header */}
       <View className="flex-row items-center px-5 pt-4 pb-2">
         <TouchableOpacity
@@ -210,6 +210,6 @@ export default function CapsuleDetailScreen() {
           )}
         </Animated.View>
       </ScrollView>
-    </SafeAreaView>
+    </SafeScreenView>
   );
 }

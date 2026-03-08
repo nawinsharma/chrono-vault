@@ -10,7 +10,7 @@ import { EmptyState } from '@/src/components/capsule/EmptyState';
 import { Button } from '@/src/components/ui/Button';
 import { truncateAddress } from '@/src/utils/format';
 import { CapsuleStatus, CapsuleMetadata } from '@/src/types/capsule';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeScreenView } from '@/src/components/ui/ScreenContainer';
 
 type TabId = 'active' | 'unlocked';
 
@@ -57,7 +57,7 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-vault-black">
+    <SafeScreenView className="flex-1 bg-vault-black">
       <View className="flex-1 px-5">
         {/* Header */}
         <Animated.View
@@ -203,6 +203,6 @@ export default function HomeScreen() {
           />
         </Animated.View>
       </View>
-    </SafeAreaView>
+    </SafeScreenView>
   );
 }

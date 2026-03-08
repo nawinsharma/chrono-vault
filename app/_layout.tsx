@@ -1,11 +1,19 @@
 import '../global.css';
 import React, { useEffect } from 'react';
+import { LogBox } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+LogBox.ignoreLogs([
+  'SafeAreaView has been deprecated',
+  'Attempted to import the module',
+  'no match was resolved',
+  'not listed in the "exports"',
+]);
 
 SplashScreen.preventAutoHideAsync();
 

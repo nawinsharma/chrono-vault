@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeScreenView } from '@/src/components/ui/ScreenContainer';
 import ViewShot from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 
@@ -37,14 +37,14 @@ export default function ShareScreen() {
 
   if (!capsule) {
     return (
-      <SafeAreaView className="flex-1 bg-vault-black items-center justify-center">
+      <SafeScreenView className="flex-1 bg-vault-black items-center justify-center">
         <Text className="text-vault-muted">Capsule not found</Text>
-      </SafeAreaView>
+      </SafeScreenView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-vault-black">
+    <SafeScreenView className="flex-1 bg-vault-black">
       {/* Header */}
       <View className="flex-row items-center px-5 pt-4 pb-4">
         <TouchableOpacity
@@ -130,6 +130,6 @@ export default function ShareScreen() {
           />
         </Animated.View>
       </View>
-    </SafeAreaView>
+    </SafeScreenView>
   );
 }

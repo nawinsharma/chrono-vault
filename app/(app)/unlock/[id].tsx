@@ -8,7 +8,7 @@ import Animated, {
   SlideInDown,
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeScreenView } from '@/src/components/ui/ScreenContainer';
 
 import { useCapsuleStore } from '@/src/stores/capsuleStore';
 import { useWalletStore } from '@/src/stores/walletStore';
@@ -93,9 +93,9 @@ export default function UnlockScreen() {
 
   if (!capsule) {
     return (
-      <SafeAreaView className="flex-1 bg-vault-black items-center justify-center">
+      <SafeScreenView className="flex-1 bg-vault-black items-center justify-center">
         <Text className="text-vault-muted">Capsule not found</Text>
-      </SafeAreaView>
+      </SafeScreenView>
     );
   }
 
@@ -107,7 +107,7 @@ export default function UnlockScreen() {
   // Phase: Confirm unlock
   if (phase === 'confirm') {
     return (
-      <SafeAreaView className="flex-1 bg-vault-black">
+      <SafeScreenView className="flex-1 bg-vault-black">
         <View className="flex-row items-center px-5 pt-4 pb-2">
           <TouchableOpacity
             onPress={() => router.back()}
@@ -149,14 +149,14 @@ export default function UnlockScreen() {
             />
           </Animated.View>
         </View>
-      </SafeAreaView>
+      </SafeScreenView>
     );
   }
 
   // Phase: Unlocking in progress
   if (phase === 'unlocking') {
     return (
-      <SafeAreaView className="flex-1 bg-vault-black items-center justify-center">
+      <SafeScreenView className="flex-1 bg-vault-black items-center justify-center">
         <Animated.View entering={FadeIn.duration(500)} className="items-center px-8">
           <View className="w-20 h-20 rounded-full bg-vault-card items-center justify-center border border-vault-purple mb-6">
             <Ionicons name="sync" size={32} color="#8B5CF6" />
@@ -168,13 +168,13 @@ export default function UnlockScreen() {
             Verifying on-chain timestamp and decrypting your message...
           </Text>
         </Animated.View>
-      </SafeAreaView>
+      </SafeScreenView>
     );
   }
 
   // Phase: Revealed content
   return (
-    <SafeAreaView className="flex-1 bg-vault-black">
+    <SafeScreenView className="flex-1 bg-vault-black">
       <View className="flex-row items-center px-5 pt-4 pb-2">
         <TouchableOpacity
           onPress={() => router.back()}
@@ -283,6 +283,6 @@ export default function UnlockScreen() {
           />
         </Animated.View>
       </ScrollView>
-    </SafeAreaView>
+    </SafeScreenView>
   );
 }

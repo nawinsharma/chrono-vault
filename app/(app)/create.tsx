@@ -14,10 +14,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { v4 as uuidv4 } from 'uuid';
+import { SafeScreenView } from '@/src/components/ui/ScreenContainer';
 
 import { Input } from '@/src/components/ui/Input';
+import { uuidv4 } from '@/src/utils/uuid';
 import { Button } from '@/src/components/ui/Button';
 import { useWalletStore } from '@/src/stores/walletStore';
 import { useCapsuleStore } from '@/src/stores/capsuleStore';
@@ -145,7 +145,7 @@ export default function CreateCapsuleScreen() {
 
   if (capsuleStore.creating) {
     return (
-      <SafeAreaView className="flex-1 bg-vault-black">
+      <SafeScreenView className="flex-1 bg-vault-black">
         <View className="flex-1 items-center justify-center px-8">
           <Animated.View entering={FadeIn.duration(500)} className="items-center">
             <View className="w-20 h-20 rounded-full bg-vault-card items-center justify-center border border-vault-purple mb-8">
@@ -182,12 +182,12 @@ export default function CreateCapsuleScreen() {
             ))}
           </Animated.View>
         </View>
-      </SafeAreaView>
+      </SafeScreenView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-vault-black">
+    <SafeScreenView className="flex-1 bg-vault-black">
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
@@ -385,6 +385,6 @@ export default function CreateCapsuleScreen() {
           </Animated.View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </SafeScreenView>
   );
 }

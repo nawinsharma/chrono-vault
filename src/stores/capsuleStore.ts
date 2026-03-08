@@ -3,6 +3,22 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CapsuleMetadata, CapsuleStatus } from '@/src/types/capsule';
 
+const safeStorage = {
+  getItem: async (name: string): Promise<string | null> => {
+    try {
+      return await AsyncStorage.getItem(name);
+    } catch {
+      return null;
+    }
+  },
+  setItem: async (name: string, value: string) => {
+    await AsyncStorage.setItem(name, value);
+  },
+  removeItem: async (name: string) => {
+    await AsyncStorage.removeItem(name);
+  },
+};
+
 interface CapsuleStore {
   capsules: CapsuleMetadata[];
   loading: boolean;
@@ -59,7 +75,7 @@ export const useCapsuleStore = create<CapsuleStore>()(
     }),
     {
       name: 'chronovault-capsules',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => safeStorage),
       partialize: (state) => ({ capsules: state.capsules }),
     }
   )

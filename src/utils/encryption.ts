@@ -1,5 +1,5 @@
-import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
+import { uuidv4 } from './uuid';
 
 const ALGORITHM = 'AES-GCM';
 const KEY_LENGTH = 256;
@@ -61,7 +61,7 @@ export async function encryptData(
   const encryptedBase64 = arrayBufferToBase64(encryptedBuffer);
   const encrypted = `${ivBase64}:${encryptedBase64}`;
 
-  const keyId = Crypto.randomUUID();
+  const keyId = uuidv4();
   const keyExported = await exportKey(key);
   await SecureStore.setItemAsync(`capsule-key-${keyId}`, keyExported);
 

@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
-import Animated, {
-  FadeIn,
-  FadeInDown,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
-import { Ionicons } from '@expo/vector-icons';
-import { ScreenContainer } from '@/src/components/ui/ScreenContainer';
-import { Button } from '@/src/components/ui/Button';
-import { useWalletConnection } from '@/src/hooks/useWalletConnection';
 import { PulseRing } from '@/src/components/animations/PulseRing';
+import { Button } from '@/src/components/ui/Button';
+import { ScreenContainer } from '@/src/components/ui/ScreenContainer';
+import { useWalletConnection } from '@/src/hooks/useWalletConnection';
 import type { SupportedWallet } from '@/src/types/wallet';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import Animated, {
+    FadeIn,
+    FadeInDown,
+    useAnimatedStyle,
+    useSharedValue,
+    withSpring,
+} from 'react-native-reanimated';
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
