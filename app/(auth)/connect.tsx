@@ -6,7 +6,7 @@ import type { SupportedWallet } from '@/src/types/wallet';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Platform, Text, TouchableOpacity, View } from 'react-native';
 import Animated, {
     FadeIn,
     FadeInDown,
@@ -78,8 +78,13 @@ function WalletOption({
 
 export default function ConnectWalletScreen() {
   const router = useRouter();
-  const { connect, connecting } = useWalletConnection();
+  const { connect, connectDemoWallet, connecting } = useWalletConnection();
   const [selectedWallet, setSelectedWallet] = useState<SupportedWallet | null>(null);
+
+  const handleDemoWallet = () => {
+    connectDemoWallet();
+    router.replace('/(app)/home');
+  };
 
   const handleConnect = async () => {
     if (!selectedWallet) return;
@@ -147,11 +152,21 @@ export default function ConnectWalletScreen() {
             disabled={!selectedWallet}
             size="lg"
           />
+          {Platform.OS !== 'web' && (
+            <TouchableOpacity
+              onPress={handleDemoWallet}
+              className="mt-4 py-3 px-4 rounded-xl border border-vault-border bg-vault-dark"
+            >
+              <Text className="text-vault-muted text-sm text-center">
+                Use demo wallet (run app without real wallet)
+              </Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             onPress={() => router.replace('/(app)/home')}
-            className="mt-4 py-2"
+            className="mt-3 py-2"
           >
-            <Text className="text-vault-muted text-sm text-center">
+            <Text className="text-vault-muted text-xs text-center">
               Skip for now
             </Text>
           </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, {
   FadeIn,
@@ -13,6 +13,7 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
+import { useWalletConnection } from '@/src/hooks/useWalletConnection';
 import { useAppStore } from '@/src/stores/appStore';
 import { useWalletStore } from '@/src/stores/walletStore';
 import { Button } from '@/src/components/ui/Button';
@@ -29,6 +30,7 @@ const STEPS = [
 
 export default function OnboardingScreen() {
   const router = useRouter();
+  const { connectDemoWallet } = useWalletConnection();
   const hasOnboarded = useAppStore((s) => s.hasOnboarded);
   const setOnboarded = useAppStore((s) => s.setOnboarded);
   const connected = useWalletStore((s) => s.connected);
@@ -68,6 +70,9 @@ export default function OnboardingScreen() {
 
   const handleDemo = () => {
     setOnboarded(true);
+    if (Platform.OS !== 'web') {
+      connectDemoWallet();
+    }
     router.push('/(app)/home');
   };
 

@@ -6,6 +6,10 @@ import type { Transaction } from '@solana/web3.js';
 /** Signs and sends a transaction (from a real wallet); returns signature. Not persisted. */
 export type SignAndSendTransaction = (tx: Transaction) => Promise<string>;
 
+/** Address shown in navbar for demo wallet so it looks like a real one. */
+export const DEMO_DISPLAY_ADDRESS =
+  '7xKXtg2mNq2F8p5L9s3R1vY4wE6tU8iO0pA2sD4fG6hJ8k';
+
 interface WalletStore {
   publicKey: string | null;
   connected: boolean;
@@ -15,6 +19,8 @@ interface WalletStore {
   /** Set when a real wallet (e.g. Phantom on web) is connected; used for on-chain create/unlock. */
   signAndSendTransaction: SignAndSendTransaction | null;
 
+  /** Address to show in UI (same as publicKey for real wallets, DEMO_DISPLAY_ADDRESS for demo). */
+  getDisplayAddress: () => string;
   setWallet: (publicKey: string, walletName: string, signAndSend?: SignAndSendTransaction | null) => void;
   setBalance: (balance: number) => void;
   disconnect: () => void;
@@ -55,13 +61,19 @@ const walletStorage = {
 
 export const useWalletStore = create<WalletStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       publicKey: null,
       connected: false,
       balance: 0,
       walletName: null,
       connecting: false,
       signAndSendTransaction: null,
+
+      getDisplayAddress: () => {
+        const state = get();
+        if (state.walletName === 'Demo' && state.connected) return DEMO_DISPLAY_ADDRESS;
+        return state.publicKey ?? '';
+      },
 
       setWallet: (publicKey, walletName, signAndSend = null) =>
         set({ publicKey, connected: true, walletName, connecting: false, signAndSendTransaction: signAndSend ?? null }),

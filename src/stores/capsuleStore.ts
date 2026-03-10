@@ -1,7 +1,14 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CapsuleMetadata, CapsuleStatus } from '@/src/types/capsule';
+import {
+  CapsuleMetadata,
+  CapsuleStatus,
+  ConditionResult,
+  ConditionEvaluationResult,
+} from '@/src/types/capsule';
+
+const DEMO_PAYLOADS_KEY = 'chronovault-demo-payloads';
 
 const safeStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -19,6 +26,21 @@ const safeStorage = {
   },
 };
 
+async function getDemoPayloads(): Promise<Record<string, string>> {
+  try {
+    const raw = await AsyncStorage.getItem(DEMO_PAYLOADS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+async function setDemoPayload(id: string, payload: string): Promise<void> {
+  const map = await getDemoPayloads();
+  map[id] = payload;
+  await AsyncStorage.setItem(DEMO_PAYLOADS_KEY, JSON.stringify(map));
+}
+
 interface CapsuleStore {
   capsules: CapsuleMetadata[];
   loading: boolean;
@@ -28,6 +50,12 @@ interface CapsuleStore {
   addCapsule: (capsule: CapsuleMetadata) => void;
   removeCapsule: (id: string) => void;
   updateCapsuleStatus: (id: string, status: CapsuleStatus) => void;
+  updateConditionResult: (
+    id: string,
+    result: ConditionResult,
+    evaluation?: ConditionEvaluationResult
+  ) => void;
+  updateCapsule: (id: string, updates: Partial<CapsuleMetadata>) => void;
   setCapsules: (capsules: CapsuleMetadata[]) => void;
   setLoading: (loading: boolean) => void;
   setCreating: (creating: boolean) => void;
@@ -35,6 +63,8 @@ interface CapsuleStore {
   getCapsuleById: (id: string) => CapsuleMetadata | undefined;
   getActiveCapsules: () => CapsuleMetadata[];
   getUnlockedCapsules: () => CapsuleMetadata[];
+  setDemoPayload: (id: string, payload: string) => Promise<void>;
+  getDemoPayload: (id: string) => Promise<string | null>;
 }
 
 export const useCapsuleStore = create<CapsuleStore>()(
@@ -60,6 +90,22 @@ export const useCapsuleStore = create<CapsuleStore>()(
           ),
         })),
 
+      updateConditionResult: (id, result, evaluation) =>
+        set((state) => ({
+          capsules: state.capsules.map((c) =>
+            c.id === id
+              ? { ...c, conditionResult: result, conditionEvaluation: evaluation }
+              : c
+          ),
+        })),
+
+      updateCapsule: (id, updates) =>
+        set((state) => ({
+          capsules: state.capsules.map((c) =>
+            c.id === id ? { ...c, ...updates } : c
+          ),
+        })),
+
       setCapsules: (capsules) => set({ capsules }),
       setLoading: (loading) => set({ loading }),
       setCreating: (creating) => set({ creating }),
@@ -72,6 +118,12 @@ export const useCapsuleStore = create<CapsuleStore>()(
 
       getUnlockedCapsules: () =>
         get().capsules.filter((c) => c.status === CapsuleStatus.Unlocked),
+
+      setDemoPayload,
+      getDemoPayload: async (id: string) => {
+        const map = await getDemoPayloads();
+        return map[id] ?? null;
+      },
     }),
     {
       name: 'chronovault-capsules',

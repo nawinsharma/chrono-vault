@@ -11,6 +11,7 @@ import { useCapsuleStore } from '@/src/stores/capsuleStore';
 import { Button } from '@/src/components/ui/Button';
 import { formatUnlockDate } from '@/src/utils/time';
 import { truncateAddress } from '@/src/utils/format';
+import { WalletNavPill } from '@/src/components/ui/WalletNavPill';
 
 export default function ShareScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -46,16 +47,19 @@ export default function ShareScreen() {
   return (
     <SafeScreenView className="flex-1 bg-vault-black">
       {/* Header */}
-      <View className="flex-row items-center px-5 pt-4 pb-4">
-        <TouchableOpacity
-          onPress={() => router.back()}
-          className="w-10 h-10 rounded-full bg-vault-card items-center justify-center border border-vault-border"
-        >
-          <Ionicons name="arrow-back" size={20} color="#E5E7EB" />
-        </TouchableOpacity>
-        <Text className="text-vault-white text-lg font-semibold ml-4">
-          Share Capsule
-        </Text>
+      <View className="flex-row items-center justify-between px-5 pt-4 pb-4">
+        <View className="flex-row items-center">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="w-10 h-10 rounded-full bg-vault-card items-center justify-center border border-vault-border"
+          >
+            <Ionicons name="arrow-back" size={20} color="#E5E7EB" />
+          </TouchableOpacity>
+          <Text className="text-vault-white text-lg font-semibold ml-4">
+            Share Capsule
+          </Text>
+        </View>
+        <WalletNavPill />
       </View>
 
       <View className="flex-1 px-5 items-center justify-center">

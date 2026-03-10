@@ -44,8 +44,17 @@ const WALLET_REQUIRED_MESSAGE =
     ? "Install a Solana wallet (e.g. Phantom at phantom.app) and refresh, then connect."
     : "Connect a Solana wallet on web (e.g. Phantom in your browser) to create and unlock capsules.";
 
+/** Dummy public key for demo wallet (mobile / Expo Go); no real signing. */
+export const DEMO_WALLET_PUBLIC_KEY =
+  "DemoWallet111111111111111111111111111111111";
+
 export function useWalletConnection() {
   const store = useWalletStore();
+
+  const connectDemoWallet = useCallback(() => {
+    store.setWallet(DEMO_WALLET_PUBLIC_KEY, "Demo", null);
+    store.setBalance(0);
+  }, [store]);
 
   const connect = useCallback(
     async (walletName: string) => {
@@ -101,10 +110,16 @@ export function useWalletConnection() {
     }
   }, [store]);
 
+  const isDemoWallet =
+    store.connected &&
+    (store.walletName === "Demo" || store.publicKey === DEMO_WALLET_PUBLIC_KEY);
+
   return {
     ...store,
     connect,
+    connectDemoWallet,
     disconnect,
     refreshBalance,
+    isDemoWallet,
   };
 }
